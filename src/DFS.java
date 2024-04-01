@@ -7,7 +7,9 @@ public class DFS {
         for (Sac sac : sacs) {
             but.poid_total += sac.poid;
         }
+        long p = but.poid_total;
         but = dfs(but, sacs, objets);
+        but.poid_total = p - but.poid_total;
         System.out.println("dfs");
         System.out.println("solution but");
 
@@ -19,10 +21,10 @@ public class DFS {
         HashSet<Node> visitedNodes = new HashSet<>();
         int prof_max = 0;
         stack.push(but);
-       // long nb = 0;
+        //long nb = 0;
         while (!stack.isEmpty()) {
             Node n = stack.pop();
-           // nb++;
+            //nb++;
             //System.out.println(nb);
             visitedNodes.add(n);
             if (n.profondeur_max > prof_max){
@@ -45,9 +47,7 @@ public class DFS {
                     if (!visited(n, obj.id)) {
                         Node succ = new Node(sacs.length, objets.length);
                         for (int i = 0; i < sacs.length; i++) {
-                            for (int j = 0; j < objets.length; j++) {
-                                succ.matrice[i][j] = n.matrice[i][j];
-                            }
+                            System.arraycopy(n.matrice[i], 0, succ.matrice[i], 0, objets.length);
                         }
                         succ.poid_total = n.poid_total;
                         succ.val_total = n.val_total;

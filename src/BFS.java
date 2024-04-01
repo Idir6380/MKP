@@ -9,7 +9,9 @@ public class BFS {
         for (Sac sac : sacs) {
             but.poid_total += sac.poid;
         }
+        long p = but.poid_total;
         but = bfs(but, sacs, objets);
+        but.poid_total = p - but.poid_total;
         System.out.println("bfs");
         System.out.println("solution but");
         return but;
@@ -20,13 +22,14 @@ public class BFS {
         Set<Node> closed = new HashSet<>();
         int prof_max = 0;
         Queue.add(but);
-        //int nb = 0;
+        //long nb = 0;
         while (!Queue.isEmpty()) {
             Node n = Queue.remove(0);
-          //  nb++;
-            //System.out.println(nb);
+           // nb++;
+            //System.out.print("-");
             if (n.profondeur_max>prof_max){
                 prof_max = n.profondeur_max;
+                System.out.println("\n"+prof_max);
             }
             closed.add(n);
             if ((n.val_total>but.val_total) || (n.val_total == but.val_total && n.poid_total > but.poid_total)){                //System.out.println("remplissage!");
@@ -46,9 +49,7 @@ public class BFS {
                     if (!visited(n, obj.id)) {
                         Node succ = new Node(sacs.length, objets.length);
                         for (int i = 0; i < sacs.length; i++) {
-                            for (int j = 0; j < objets.length; j++) {
-                                succ.matrice[i][j] = n.matrice[i][j];
-                            }
+                            System.arraycopy(n.matrice[i], 0, succ.matrice[i], 0, objets.length);
                         }
                         succ.poid_total = n.poid_total;
                         succ.val_total = n.val_total;

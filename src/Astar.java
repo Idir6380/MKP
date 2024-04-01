@@ -61,6 +61,7 @@ public class Astar {
             }
         }
         initial_node.profondeur_max = profMax;
+        initial_node.poid_total = initial_node.g;
         return initial_node;
     }
     public static boolean visited(Node node, int objet){

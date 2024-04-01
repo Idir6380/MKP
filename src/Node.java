@@ -3,7 +3,7 @@ public class Node {
     int g = 0;
     int h = 0;
     double f = 0;
-    int poid_total = 0;
+    long poid_total = 0;
     int val_total = 0;
     int profondeur_max = 0;
     String configuration;
