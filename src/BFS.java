@@ -17,6 +17,7 @@ public class BFS {
         return but;
     }
 
+
     public static Node bfs(Node but, Sac[] sacs, Objet[] objets) {
         List<Node> Queue = new ArrayList<>();
         Set<Node> closed = new HashSet<>();

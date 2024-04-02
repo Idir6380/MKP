@@ -16,6 +16,7 @@ public class DFS {
         return but;
     }
 
+
     public static Node dfs(Node but, Sac[] sacs, Objet[] objets) {
         Stack<Node> stack = new Stack<>();
         HashSet<Node> visitedNodes = new HashSet<>();

@@ -41,4 +41,5 @@ public class Node {
         Node other = (Node) obj;
         return configuration.equals(other.configuration);
     }
+
 }

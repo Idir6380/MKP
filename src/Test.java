@@ -38,6 +38,7 @@ public class Test {
                             objets[i] = new Objet(i, valeur, poids);
                             poidsMinObjets = Math.min(poidsMinObjets, poids);
                             poidsMaxObjets = Math.max(poidsMaxObjets, poids);
+
                         }
 
                         for (int i = 0; i < nbs; i++){
