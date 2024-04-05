@@ -30,7 +30,7 @@ public class BFS {
             //System.out.print("-");
             if (n.profondeur_max>prof_max){
                 prof_max = n.profondeur_max;
-                System.out.println("\n"+prof_max);
+                //System.out.println("\n"+prof_max);
             }
             closed.add(n);
             if ((n.val_total>but.val_total) || (n.val_total == but.val_total && n.poid_total > but.poid_total)){                //System.out.println("remplissage!");

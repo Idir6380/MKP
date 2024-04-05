@@ -14,7 +14,7 @@ public class Test {
                  writer.println("Nb_sac, Nb_obj, Algorithme, Temps (s), Profondeur, Poids_min_sacs(g), Poids_max_sacs(g), Poids_min_objets(g), Poids_max_objets(g)");
 
 
-                 for (int nbo = 5; nbo < 26; nbo+=5) {
+                 for (int nbo = 5; nbo < 25; nbo+=5) {
                      for (int nbs = 1; nbs < 4; nbs++) {
                          Sac[] sacs = new Sac[nbs];
                          Objet[] objets = new Objet[nbo];
