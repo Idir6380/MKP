@@ -51,9 +51,9 @@ public class TestBSO {
 
                     long startTime, endTime;
                     double duration;
-                    for(int MAX_ITER = 10; MAX_ITER < 101; MAX_ITER+=1){
-                        for (int NBR_BEE = 5; NBR_BEE < 21; NBR_BEE+=1){
-                            for (int FLIP = 1; FLIP <= 20; FLIP+=1){
+                    for(int MAX_ITER = 5; MAX_ITER < 51; MAX_ITER+=5){
+                        for (int NBR_BEE = 5; NBR_BEE < 21; NBR_BEE+=5){
+                            for (int FLIP = 1; FLIP <= 10; FLIP+=1){
                                 for (int MAX_CHANCES = 1; MAX_CHANCES<= 10; MAX_CHANCES+=1){
                                     BSO bso = new BSO(sacs, objets, MAX_ITER, NBR_BEE, FLIP, MAX_CHANCES);
                                     Node b = new Node(nbs, nbo);
