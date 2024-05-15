@@ -13,7 +13,7 @@ public class BSOvsGA {
             writer.println("Nb_sac, Nb_obj, Algorithme, Temps (s), VALEUR_TOTAL");
 
 
-            for (int nbo = 1000; nbo < 10001; nbo+=100) {
+            for (int nbo = 100; nbo < 10001; nbo+=500) {
                 for (int nbs = 1; nbs < 50; nbs+=2) {
                     Sac[] sacs = new Sac[nbs];
                     Objet[] objets = new Objet[nbo];
