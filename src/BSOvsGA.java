@@ -12,9 +12,9 @@ public class BSOvsGA {
              PrintWriter writer = new PrintWriter(bufferedWriter, true)){
             writer.println("Nb_sac, Nb_obj, Algorithme, Temps (s), VALEUR_TOTAL");
 
-            for (int nbs = 5; nbs < 55; nbs+=5) {
-            for (int nbo = 100; nbo < 1001; nbo+=100) {
 
+            for (int nbo = 1000; nbo < 10001; nbo+=100) {
+                for (int nbs = 1; nbs < 50; nbs+=2) {
                     Sac[] sacs = new Sac[nbs];
                     Objet[] objets = new Objet[nbo];
                     Random rand = new Random();
@@ -83,8 +83,8 @@ public class BSOvsGA {
 
 
                     System.out.println("resultats BSO:");
-                    for (int i = 0; i < nbs; i++){
-                        for (int j = 0; j < nbo; j++) {
+                    for (int i = 0; i < but2.matrice.length; i++){
+                        for (int j = 0; j < but2.matrice[0].length; j++) {
                             System.out.print(but2.matrice[i][j]+" ");
                         }
                         System.out.println();

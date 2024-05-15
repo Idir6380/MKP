@@ -1,9 +1,6 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-//cas non traiter nbr de sac superieur a celui des objet 
+import java.util.*;
+
+//cas non traiter nbr de sac superieur a celui des objet
 public class BSO {
     // Definir les parametres de l algorithme BSO
     static  int MAX_ITER;
@@ -49,10 +46,11 @@ public class BSO {
     }
 
     public static Node search() {
+
         //beeint
         Node but = new Node(NUM_SACKS, NUM_ITEMS) ;
         int[][]Sref= generatesref();
-        // Afficher la matrice sref initiale 
+        // Afficher la matrice sref initiale
         System.out.println("sref init:");
         for(int i=0; i<NUM_SACKS; i++) {
 
@@ -63,36 +61,39 @@ public class BSO {
         }
         List<int[][]> tabooList=new ArrayList<>();
         Set<int[][]> searchArea;
-        int[][] Sbest = null;
+        int[][] Sbest = new int[NUM_SACKS][NUM_ITEMS];
         int nbChances=MAX_CHANCES;
         for(int iter=0;iter < MAX_ITER; iter++){
             //insere sref lis taboo
             tabooList.add(Sref.clone());
-            //determinate serach point 
+            //determinate serach point
+            System.out.println(iter);
             searchArea=generatesearcharea(Sref, NBR_BEE, FLIP);
-
+            System.out.println("generated");
             //pour chaque abeille
             for (int[][] s : searchArea) {
                 int[][] localSearchResult = localSearch(s);
+                System.out.print("-");
                 // Ajouter chaque solution à la liste Danse
                 Danse.add(localSearchResult);
+
 
             }
             List<int[][]> DList = new ArrayList<>(Danse);
             // Code pour déterminer Sbest(t+1)
 
-
-            Sbest=DList.get(0);
+            if (!DList.isEmpty())
+                Sbest=DList.get(0);
             for (int[][] solution : DList) {
-                if (fitness(solution, VALUES, WEIGHTS) > fitness(Sbest, VALUES, WEIGHTS)) {
+                if (fitness(solution, VALUES, WEIGHTS) < fitness(Sbest, VALUES, WEIGHTS)) {
                     Sbest = solution;
                 }
             }
 
 
             Sref=selectionSol(Sref, Sbest, tabooList, DList, nbChances, MAX_CHANCES, VALUES, WEIGHTS);
-            
-           
+
+
             /*System.out.println("\nsref final:");
             printMatrix(Sref);*/
         }
@@ -111,7 +112,7 @@ public class BSO {
             System.out.println("searcharea init:");
             for (int[] row : s) {
                 for (int item : row) {
-                    
+
                     System.out.print(item + " ");
                 }
                 System.out.println();
@@ -160,8 +161,8 @@ public class BSO {
     private static Set<int[][]> generatesearcharea(int[][] sRef, int B, int FLIP) {
         Set<int[][]> searchArea = new HashSet<>();
         Random rand = new Random();
-
-        while (searchArea.size() < B) {
+        int h=0;
+        while (searchArea.size() < B && h<FLIP) {
             int[][] s = new int[sRef.length][sRef[0].length];
 
             for (int i = 0; i < sRef.length; i++) {
@@ -169,10 +170,10 @@ public class BSO {
             }
             int p = 0;
             while (searchArea.size() < B && p < FLIP) {
-                copyrow(s, rand.nextInt(sRef[0].length));
+                copyrow(s, FLIP*p+h);
                 p++;
             }
-
+            h++;
             if (isValid(s)) {
                 boolean isUnique = true;
                 for (int[][] existing : searchArea) {
@@ -300,14 +301,31 @@ public class BSO {
     private static double fitness(int[][] s, int[] VALUES, int[] WEIGHTS) {
         int totalValue = 0;
         int totalWeight = 0;
+        boolean[] objectsNotInBag = new boolean[VALUES.length]; // Initialiser un tableau pour suivre les objets non insérés
+        Arrays.fill(objectsNotInBag, true); // Supposer initialement que tous les objets ne sont pas dans un sac
+
 
         // Calculer la somme des valeurs des objets restants
         for (int i = 0; i < s[0].length; i++) {
-            if (s[0][i] == 0) {
+            boolean objectInBag = false;
+            for (int[] bag : s) { // Parcourir tous les sacs
+                if (bag[i] == 1) { // Si l'objet est dans ce sac
+                    objectInBag = true;
+                    break;
+                }
+            }
+            if (!objectInBag) { // Si l'objet n'est dans aucun sac
                 totalValue += VALUES[i];
+            } else {
+                objectsNotInBag[i] = false; // Marquer l'objet comme étant dans un sac
             }
         }
-
+        // Calculer la somme des valeurs des objets restants
+        for (int i = 0; i < objectsNotInBag.length; i++) {
+            if (objectsNotInBag[i]) { // Si l'objet n'est dans aucun sac
+                totalValue += VALUES[i]; // Ajouter sa valeur au fitness
+            }
+        }
         // Calculer la somme des poids des objets insérés
         for (int i = 0; i < s.length; i++) {
             for (int j = 0; j < s[i].length; j++) {
@@ -337,15 +355,16 @@ public class BSO {
         }
 
         // verifier si le poids total de chaque sac ne depasse pas la capacite maximale
-        for (int sack=0;sack<solution.length;sack++) {
-            int totalWeight=0;
-            for (int item=0; item<solution[sack].length;item++) {
-                totalWeight+=solution[sack][item] * WEIGHTS[item];
+        for (int sack = 0; sack < MAX_CAPACITY.length; sack++) {
+            int totalWeight = 0;
+            for (int item = 0; item < solution[sack].length; item++) {
+                totalWeight += solution[sack][item] * WEIGHTS[item];
             }
-            if (totalWeight>MAX_CAPACITY[sack]) {
+            if (totalWeight > MAX_CAPACITY[sack]) {
                 return false;
             }
         }
+
 
         // La solution est valide
         return true;

@@ -24,6 +24,8 @@ public class Interface extends JFrame {
         algorithmeComboBox.addItem("DFS");
         algorithmeComboBox.addItem("BFS");
         algorithmeComboBox.addItem("A*");
+        algorithmeComboBox.addItem("BSO");
+        algorithmeComboBox.addItem("GA");
 
         selectionnerButton = new JButton("Sélectionner un fichier CSV");
         selectionnerButton.addActionListener(new SelectionnerButtonListener());
@@ -125,6 +127,14 @@ public class Interface extends JFrame {
         Node initialNode= new Node(sacs.length, objets.length);
         return Astar.astar(objets, sacs, initialNode);
     }
+    public Node executerBSO(Sac[] sacs, Objet[] objets){
+        BSO bso = new BSO(sacs, objets, 10, 10, 1, 3);
+        return  bso.search();
+    }
+    public Node executerGA(Sac[] sacs, Objet[] objets){
+        Genetic ga = new Genetic(sacs, objets, 50,100, 0.5, 0.2);
+        return ga.search();
+    }
 
     private void testerAlgorithmeSurFichier(String algorithme, File fichier) {
         Scanner scanner= null;
@@ -177,6 +187,12 @@ public class Interface extends JFrame {
                 case "A*":
                     resultat= executerAStar(sacs, objets);
                     break;
+                case "BSO":
+                    resultat=executerBSO(sacs, objets);
+                    break;
+                case "GA":
+                    resultat=executerGA(sacs, objets);
+                    break;
             }
             long endTime = System.currentTimeMillis();
             long executionTime = endTime - startTime;
@@ -191,31 +207,31 @@ public class Interface extends JFrame {
             resultBuilder.append("\n");
             resultBuilder.append("Details sur les sacs ").append(" :\n");
 
-            for (Sac sac : sacs) {
-                resultBuilder.append("Sac ").append(sac.id).append(" :\n");
+            for (int i =0; i< resultat.matrice.length; i++) {
+                resultBuilder.append("Sac ").append(i).append(" :\n");
                 int poidsRempli= 0;
-                for (Objet objet : objets) {
-                    if (resultat.matrice[sac.id][objet.id] == 1) {
-                        poidsRempli += objet.poid;
+                for (int j = 0; j<resultat.matrice.length; j++) {
+                    if (resultat.matrice[i][j] == 1) {
+                        poidsRempli += objets[j].poid;
                     }
                 }
                 DecimalFormat df = new DecimalFormat("#.##");
-                double pourcentageRemplissage= (double) poidsRempli / (double) sac.poid * 100.0;
+                double pourcentageRemplissage= (double) poidsRempli / (double) sacs[i].poid * 100.0;
                 String pourcentageFormate = df.format(pourcentageRemplissage);
                 resultBuilder.append("- Objets contenus : ");
                 boolean premier = true;
-                for (Objet objet : objets) {
-                    if (resultat.matrice[sac.id][objet.id] == 1) {
+                for (int j = 0; j<resultat.matrice.length; j++) {
+                    if (resultat.matrice[i][j] == 1) {
                         if (!premier) {
                             resultBuilder.append(", ");
                         }
-                        resultBuilder.append(objet.id);
+                        resultBuilder.append(j);
                         premier = false;
                     }
                 }
                 resultBuilder.append("\n");
                 
-                resultBuilder.append("- Poids du sac : ").append(sac.poid).append("\n");
+                resultBuilder.append("- Poids du sac : ").append(i).append("\n");
                 resultBuilder.append("- Poids rempli : ").append(poidsRempli).append("\n");
                 resultBuilder.append("- Pourcentage de remplissage : ").append(pourcentageFormate).append("%\n\n");
                 
